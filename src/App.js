@@ -1,24 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
+import Messagelist from './components/messagelist/messagelist';
+import Users from './components/userlist/users';
+import Send from './components/messagesend/send';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <div class="row">
+        <div class="col s12">This div is 12-columns wide on all screen sizes</div>
+        <div class="col s6">6-columns (one-half)</div>
+        <div class="col s6">6-columns (one-half)</div>
+      </div> */}
+
+      <div className="container containerElm">
+        <div className="row rowElm">
+          <div className="col s2 userElm"><Users /></div>
+          <div className="col s10 messagelist"><Messagelist /></div>
+        </div>
+        <div className="row">
+          <Send />
+        </div>
+      </div>
     </div>
   );
 }
