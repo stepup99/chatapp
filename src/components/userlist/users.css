@@ -1,3 +1,27 @@
 .userlistElm{
     height:100%
 }
+
+.individualElm{
+    border: 1px solid red;
+    cursor:pointer;
+}
+.individualElm:hover{
+    opacity: 0.5;
+}
+
+.online{
+    float: right;
+    border-radius: 22px;
+    width: 13px;
+    height: 13px;
+    background-color: green;
+}
+
+.offline{
+    float: right;
+    border-radius: 22px;
+    width: 13px;
+    height: 13px;
+    background-color: red;
+}

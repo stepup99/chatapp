@@ -1,31 +1,63 @@
 import React, { Component } from 'react'
-import openSocket from 'socket.io-client';
+import openSocket from '../../socketlink';
+import { connect } from 'react-redux';
 class Send extends Component {
 
     state = {
-        getdata: "anujdata"
+        inputchange: ""
     }
 
-    async componentDidMount() {
-        console.log("inside compo");
-        let socket = await openSocket('http://localhost:8000');
-        socket.emit('sendmessage', {
-            message: "intitial handshare"
+
+
+
+    ChangeFn = async (e) => {
+        this.setState({
+            inputchange: e.target.value
         });
+
+        if (this.props.to.socketid !== "null") {
+
+            openSocket.emit('typing', {
+                message: "typing ...",
+                socketid: this.props.to.socketid
+            });
+
+        }
+
+        openSocket.on('sendtyping', (data) => {
+            console.log(data)
+        });
+
+
     }
-
-
 
     render() {
 
         return (
             <div>
                 <div className="input-field col s12">
-                    <input id="input_text" type="text" data-length="10" placeholder="Type Here" />
-                    <div>{this.state.getdata}</div>
+                    <input
+                        onChange={(e) => { this.ChangeFn(e) }}
+                        id="input_text"
+                        type="text"
+                        data-length="10"
+                        placeholder="Type Here"
+                        value={this.state.inputchange}
+                    />
+
                 </div>
             </div>
         )
     }
 }
-export default Send;
+
+
+const mapStateToProps = (state) => {
+
+    console.log("inside send js")
+    console.log(state)
+    return {
+        to: state.selecteduser
+    }
+}
+export default connect(mapStateToProps, null)(Send);

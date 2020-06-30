@@ -3,7 +3,7 @@ import './App.css';
 import Messagelist from './components/messagelist/messagelist';
 import Users from './components/userlist/users';
 import Send from './components/messagesend/send';
-
+import { connect } from 'react-redux';
 
 
 function App() {
@@ -22,4 +22,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect(null, null)(App);
