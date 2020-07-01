@@ -14,7 +14,7 @@ const Chatusers = new Schema({
         type: Boolean
     },
     socketid: {
-        type: String
+        type: Array
     }
 });
 

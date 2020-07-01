@@ -21,17 +21,28 @@ try {
         });
     });
 
-    router.put('/updateuserstatus/:id/:status/:socketid', (req, res) => {
+    router.put('/updateuserstatus/:id/:status/:socketid/:type', (req, res) => {
         const id = req.params.id;
         const status = req.params.status;
         let socketidVal = "";
+        const type = req.params.type;
 
         if (req.params.socketid !== "" || req.params.socketid !== null) {
             socketidVal = req.params.socketid;
         }
-        users.findByIdAndUpdate({ _id: id }, { $set: { status: status, socketid: socketidVal } }, { new: true }).then((item) => {
-            res.json(item);
-        });
+        if (type === 'push') {
+            console.log("inside push")
+            users.findByIdAndUpdate({ _id: id }, { $set: { status: status }, $push: { socketid: socketidVal } }, { new: true }).then((item) => {
+                res.json(item);
+            });
+        } else {
+            console.log("inside pop")
+            users.findByIdAndUpdate({ _id: id }, { $set: { status: status }, $pull: { socketid: socketidVal } }, { new: true }).then((item) => {
+                res.json(item);
+            });
+        }
+
+
     });
 
 

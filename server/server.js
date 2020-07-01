@@ -58,8 +58,6 @@ io.on('connection', async (socket) => {
 
     socket.on('userid', async (data) => {
         userdata = data;
-
-
         console.log("***********userid******************");
         console.log(people);
         console.log("***********userid******************");
@@ -87,9 +85,14 @@ io.on('connection', async (socket) => {
         console.log("............ on getting userid ");
         console.log(people);
         console.log("............ on getting userid ");
-        // await axios.put('http://localhost:8080/api/user/updateuserstatus/' + userdata.userid + '/' + true + '/' + socket.id);
+
+        await axios.put('http://localhost:8080/api/user/updateuserstatus/' + userdata.userid + '/' + true + '/' + socket.id + '/push');
+
+
         // const updatedData = await axios.get('http://localhost:8080/api/user/');
         // io.sockets.emit('socketfig', updatedData.data);
+
+
     });
 
     function checkcriteriaonconnect(item, index) {
@@ -99,6 +102,7 @@ io.on('connection', async (socket) => {
             people[index].socketid.push(socket.id);
         }
         console.log(people);
+
         console.log('********checkcriteriaonconnect***********')
     }
     socket.on("disconnect", async () => {
@@ -124,14 +128,15 @@ io.on('connection', async (socket) => {
 
 
         if (people.length > 0) {
-            people.some(checkcriteria);
+            people.map(checkcriteria);
             console.log("*******==============**********")
             console.log(people);
             console.log("*******==============**********")
         }
 
 
-        function checkcriteria(item, index) {
+        async function checkcriteria(item, index) {
+            let disconetedId;
             console.log("******i  m inside function checkcriteria *******")
             // it will remove all the socketid when the browser closed 
             console.log(item.socketid, socket.id)
@@ -142,18 +147,25 @@ io.on('connection', async (socket) => {
                 console.log(socketindex);
                 if (socketindex > -1) {
                     item.socketid.splice(socketindex, 1)
+                    disconetedId = item.id;
                 }
+                console.log("disconnected-------------------------")
+                console.log(disconetedId, socket.id);
+                console.log("disconnected-------------------------")
+                await axios.put('http://localhost:8080/api/user/updateuserstatus/' + disconetedId + '/' + true + '/' + socket.id + '/pop');
                 return true
-            } else {
-                console.log("else condition")
-                if (item.socketid.length === 0) {
-                    // update online to offline
-                    console.log("**********update online to offline************")
-                    people.splice(index, 1);
-                    console.log(people)
-                    console.log("**********update online to offline************")
-                }
             }
+            // else {
+            //     console.log("else condition")
+            //     if (item.socketid.length === 0) {
+            //         // update online to offline
+            //         console.log("**********update online to offline************")
+            //         people.splice(index, 1);
+            //         console.log(people)
+            //         console.log("**********update online to offline************")
+            //     }
+            // }
+
         }
 
 
